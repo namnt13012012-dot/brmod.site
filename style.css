@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0a1929 0%, #1a237e 50%, #4a148c 100%);
+    min-height: 100vh;
+    color: white;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.get-key-btn {
+    background: linear-gradient(90deg, #00bfa5, #00e676);
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.secondary-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 15px 25px;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.main-title {
+    text-align: center;
+    font-size: 36px;
+    margin: 20px 0;
+    text-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
+.search-box {
+    margin: 30px 0;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 16px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.brmod-card {
+    border-color: #00e676;
+    box-shadow: 0 0 20px rgba(0,230,118,0.2);
+}
+
+.ff-card {
+    border-color: #7c4dff;
+    box-shadow: 0 0 20px rgba(124,77,255,0.2);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.icon {
+    font-size: 24px;
+    background: #00bfa5;
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+
+.version, .stats, .status {
+    font-size: 13px;
+    background: rgba(255,255,255,0.1);
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+.desc {
+    color: #b0bec5;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.download-btn {
+    background: linear-gradient(90deg, #00c853, #00e676);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-buttons button {
+    background: rgba(0,230,118,0.2);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    color: white;
+    margin-left: 10px;
+    cursor: pointer;
+}

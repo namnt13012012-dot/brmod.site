@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhận Key BRMOD</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f345c); min-height: 100vh; display: flex; align-items: center; justify-content: center; color: white; padding: 20px; }
+        .card { background: rgba(255,255,255,0.08); border-radius: 16px; padding: 40px 30px; max-width: 500px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        h1 { font-size: 24px; margin-bottom: 10px; color: #00ffc8; }
+        .key-box { background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; margin: 25px 0; border: 1px solid #00ffc8; }
+        .key-text { font-size: 22px; font-weight: bold; color: #ffd700; letter-spacing: 2px; word-break: break-all; }
+        .info { color: #b0b0b0; margin: 10px 0; font-size: 14px; }
+        .btn { background: linear-gradient(90deg, #00c853, #00e676); border: none; padding: 12px 30px; border-radius: 8px; color: white; font-size: 16px; cursor: pointer; margin-top: 10px; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+        .btn:disabled { background: #555; cursor: not-allowed; transform: none; }
+        .loading { color: #ffd700; font-size: 18px; }
+        .error { color: #ff6b6b; }
+        .copy-notice { color: #00ffc8; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔑 Key Kích Hoạt BRMOD</h1>
+        <p class="info">Cảm ơn bạn đã hoàn thành bước xác minh!</p>
+        
+        <div id="content" class="loading">⏳ Đang lấy key, vui lòng chờ...</div>
+        
+        <div id="keySection" style="display:none;">
+            <p class="info">✅ Key của bạn (hiệu lực 4 giờ):</p>
+            <div class="key-box">
+                <p id="keyDisplay" class="key-text"></p>
+            </div>
+            <button class="btn" id="copyBtn" onclick="copyKey()">📋 Sao chép Key</button>
+            <p class="copy-notice" id="copyNotice">✅ Đã sao chép!</p>
+            <p class="info" style="margin-top:20px;">Lưu ý: Mỗi người chỉ nhận 1 key duy nhất. Key đã dùng không thể cấp lại.</p>
+        </div>
+    </div>
+
+    <script>
+        // ==== THAY LINK APPS SCRIPT CỦA BẠN VÀO DƯỚI ĐÂY ====
+        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbxw0_2xn2Q1B6vVjPhflaD8KdwsRa5uIghwZB62dX8KITV2PTa_FAmrnVDMwJBadK-3jA/exec";
+        // ====================================================
+
+        async function layKey() {
+            const content = document.getElementById("content");
+            const keySection = document.getElementById("keySection");
+            const keyDisplay = document.getElementById("keyDisplay");
+
+            try {
+                const res = await fetch(APPSCRIPT_URL);
+                const data = await res.json();
+
+                if (data.status === "ok") {
+                    content.style.display = "none";
+                    keySection.style.display = "block";
+                    keyDisplay.textContent = data.key;
+                    // Lưu vào localStorage để không cấp lại
+                    localStorage.setItem("npcbrmod_key", data.key);
+                } 
+                else if (data.status === "empty") {
+                    content.innerHTML = `<p class="error">❌ ${data.message}</p><p class="info">Vui lòng quay lại sau!</p>`;
+                }
+                else {
+                    content.innerHTML = `<p class="error">⚠️ ${data.message || "Lỗi không xác định"}</p>`;
+                }
+            } catch (err) {
+                content.innerHTML = `<p class="error">❌ Lỗi kết nối! F5 lại thử.</p>`;
+                console.error(err);
+            }
+        }
+
+        function copyKey() {
+            const key = document.getElementById("keyDisplay").textContent;
+            navigator.clipboard.writeText(key).then(() => {
+                document.getElementById("copyNotice").style.display = "block";
+                setTimeout(() => { document.getElementById("copyNotice").style.display = "none"; }, 2000);
+            });
+        }
+
+        // Kiểm tra đã có key chưa
+        const keyDaCo = localStorage.getItem("npcbrmod_key");
+        if (keyDaCo) {
+            document.getElementById("content").style.display = "none";
+            document.getElementById("keySection").style.display = "block";
+            document.getElementById("keyDisplay").textContent = keyDaCo;
+        } else {
+            layKey();
+        }
+    </script>
+</body>
+</html>

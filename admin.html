@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Lấy Key Trực Tiếp</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: linear-gradient(135deg, #0f172a, #1e293b); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .card { background: rgba(255,255,255,0.08); border-radius: 16px; padding: 40px 30px; max-width: 500px; width: 100%; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        h1 { font-size: 22px; color: #ffd700; text-align: center; margin-bottom: 25px; }
+        .input-box { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #444; background: rgba(0,0,0,0.4); color: white; font-size: 16px; margin-bottom: 20px; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.02); }
+        .btn-login { background: linear-gradient(90deg, #b8860b, #ffd700); color: #000; margin-bottom: 10px; }
+        .btn-getkey { background: linear-gradient(90deg, #22c55e, #4ade80); color: white; display: none; }
+        .key-box { background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid #ffd700; display: none; }
+        .key-text { font-size: 20px; font-weight: bold; color: #ffd700; letter-spacing: 2px; margin: 10px 0; word-break: break-all; }
+        .error { color: #ff6b6b; margin-top: 10px; display: none; }
+        .success { color: #4ade80; margin-top: 10px; display: none; }
+        .info { color: #94a3b8; font-size: 13px; margin-top: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔐 TRANG QUẢN LÝ ADMIN</h1>
+        
+        <input type="password" id="adminPass" class="input-box" placeholder="Nhập mật khẩu Admin...">
+        <button class="btn btn-login" id="loginBtn" onclick="kiemTraMatKhau()">Đăng Nhập</button>
+        
+        <div id="adminContent">
+            <button class="btn btn-getkey" id="getKeyBtn" onclick="layKeyAdmin()">LẤY KEY MỚI (Bỏ qua Link4M)</button>
+            
+            <div class="key-box" id="keyBox">
+                <p style="color:#94a3b8;">✅ Key mới:</p>
+                <p class="key-text" id="keyDisplay"></p>
+                <button class="btn" style="background:#3b82f6; margin-top:10px;" onclick="copyKey()">📋 Sao chép Key</button>
+                <p class="success" id="copyNotice">✅ Đã sao chép!</p>
+            </div>
+            
+            <p class="info">Chỉ bạn có quyền truy cập trang này<br>Key được cấp trực tiếp, không đánh dấu đã dùng</p>
+        </div>
+        
+        <p class="error" id="errorMsg">❌ Mật khẩu sai!</p>
+    </div>
+
+    <script>
+        // ===== CẤU HÌNH =====
+        const MAT_KHAU_ADMIN = "npcL@dm1n2026"; // Đổi mật khẩu thành của bạn
+        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbycElS_bi3bfu6iqUbyfK7ytESFF2vGWSrtxxm6GX4EvVEuP73QxWKsQoJ5nHMhjPeQKQ/exec";
+        // ===================
+
+        let daDangNhap = false;
+
+        function kiemTraMatKhau() {
+            const pass = document.getElementById("adminPass").value;
+            if (pass === MAT_KHAU_ADMIN) {
+                daDangNhap = true;
+                document.getElementById("adminPass").style.display = "none";
+                document.getElementById("loginBtn").style.display = "none";
+                document.getElementById("getKeyBtn").style.display = "block";
+                document.getElementById("errorMsg").style.display = "none";
+            } else {
+                document.getElementById("errorMsg").style.display = "block";
+            }
+        }
+
+        async function layKeyAdmin() {
+            const keyBox = document.getElementById("keyBox");
+            const keyDisplay = document.getElementById("keyDisplay");
+            
+            try {
+                // Tham số ?admin=1 để báo server là admin
+                const res = await fetch(APPSCRIPT_URL + "?admin=1");
+                const data = await res.json();
+
+                if (data.status === "ok" || data.status === "admin_ok") {
+                    keyBox.style.display = "block";
+                    keyDisplay.textContent = data.key;
+                } else if (data.status === "empty") {
+                    alert("Hết key rồi! Vui lòng thêm key mới vào Sheet.");
+                }
+            } catch (err) {
+                alert("Lỗi kết nối! Kiểm tra link Apps Script.");
+                console.error(err);
+            }
+        }
+
+        function copyKey() {
+            navigator.clipboard.writeText(document.getElementById("keyDisplay").textContent);
+            document.getElementById("copyNotice").style.display = "block";
+            setTimeout(() => document.getElementById("copyNotice").style.display = "none", 2000);
+        }
+    </script>
+</body>
+</html>
